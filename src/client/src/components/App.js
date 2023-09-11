@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import '../styles/App.css';
 import '../styles/bootstrap.min.css'
-import { movies, slots } from "./data";
+import { movies, slots,seats } from "./data";
 import axios from "axios";
-
+//import bookmyshow_logo from './bookmyshow_logo.png';
 
 
 const App = () => {
@@ -58,9 +58,8 @@ const handleSubmit = async (e)=>{
   e.preventDefault();
 
   await axios.post('http://localhost:8080/api/booking', state)
-  .then((response) => {
-    alert('Data sent successfully:', response.data);
-    localStorage.setItem("PostData",JSON.stringify(state));
+  .then(() => {
+    alert('Ticket booked successfully');
     window.location.reload();
   })
   .catch((error) => {
@@ -73,6 +72,7 @@ useEffect(()=>{
     axios.get('http://localhost:8080/api/booking')
    .then((response)=>{
     //console.log(response.data[0])
+      localStorage.setItem("PostData",JSON.stringify(response.data[0]));
       setlastData(response.data[0]);
    })
    .catch((err)=>{
@@ -80,19 +80,18 @@ useEffect(()=>{
    })
 },[])
 
-
-console.log(lastdata,"this is from mongodb");
-
+//console.log(bookmyshow_logo);
+console.log(lastdata.seats,"this is from mongodb");
   return (<>  
     <div className="container">
         <div className="column-1">
-            <h4>Book That Show</h4>
+            <h4 className="book">book<span className="my">my</span>show</h4>
             <form onSubmit={handleSubmit}>
             <div>
               {/* movie selection */}
                 <div className="movie-row">
                   <h5>Select a movie</h5>
-                  <input type="radio" className="btn-check" name="movie_name" id="movie1" autoComplete="off"  />
+                  <input type="radio" className="btn-check bold" name="movie_name" id="movie1" autoComplete="off"  />
                   <label className="btn btn-outline-danger m-2" htmlFor="movie1"  onClick={()=>{setMovie(movies[0])}}>{movies[0]}</label>
                   
                   <input type="radio" className="btn-check" name="movie_name" id="movie2" autoComplete="off" />
@@ -179,12 +178,12 @@ console.log(lastdata,"this is from mongodb");
                 <div>
                   <h5>Last Booking Detail</h5>
                   <h6>Seats:</h6>
-                  <h6>A1:{data.seats.A1}</h6>
-                  <h6>A2:{data.seats.A2}</h6>
-                  <h6>A3:{data.seats.A3}</h6>
-                  <h6>A4:{data.seats.A4}</h6>
-                  <h6>D1:{data.seats.D1}</h6>
-                  <h6>D2:{data.seats.D2}</h6>
+                  <h6>A1: <span>{data.seats.A1}</span></h6>
+                  <h6>A2: {data.seats.A2}</h6>
+                  <h6>A3: {data.seats.A3}</h6>
+                  <h6>A4: {data.seats.A4}</h6>
+                  <h6>D1: {data.seats.D1}</h6>
+                  <h6>D2: {data.seats.D2}</h6>
                   <h6>Slot: {lastdata.slot}</h6>
                   <h6>Movie: {lastdata.movie}</h6>
                 </div>

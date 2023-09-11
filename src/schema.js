@@ -4,12 +4,12 @@ const bookMovieSchema = new Schema({
     movie: Schema.Types.String,
     slot: Schema.Types.String,
     seats: {
-        A1: Schema.Types.Number,
-        A2: Schema.Types.Number,
-        A3: Schema.Types.Number,
-        A4: Schema.Types.Number,
-        D1: Schema.Types.Number,
-        D2: Schema.Types.Number
+        A1: Schema.Types.String,
+        A2: Schema.Types.String,
+        A3: Schema.Types.String,
+        A4: Schema.Types.String,
+        D1: Schema.Types.String,
+        D2: Schema.Types.String
     }
 
 })
