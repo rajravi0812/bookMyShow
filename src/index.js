@@ -33,8 +33,8 @@ app.get('/api/booking', async (req, res) => {
         .sort({ _id: -1})
         .limit(1)
         .exec();
-  
-      return res.status(200).json(lastElement);
+          return res.status(200).json(lastElement);
+     
     } catch (error) {
       console.error('Error fetching last element:', error);
       return res.status(500).json({ message: 'Internal Server Error' });

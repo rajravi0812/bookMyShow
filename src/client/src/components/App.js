@@ -7,8 +7,8 @@ import axios from "axios";
 
 
 const App = () => {
-  let data;
 const [lastdata,setlastData] = useState({});
+const [show,setshow] =useState(false);
 const [movie, setMovie] = useState("");
 const [slot, setSlot] = useState("");
 const [seat , setSeat] = useState({
@@ -41,17 +41,14 @@ const { name, value } = e.target;
   });
 }
   //####---data from localstorage--#####//
-const storeData =()=>{
-  let fetchdata = localStorage.getItem("PostData");
-  if(fetchdata){
-  data = JSON.parse(fetchdata);
-  console.log(data,"this is from local");
-}
-else{
-  data = state;
-}
-} 
-storeData();
+// const storeData =()=>{
+//   let fetchdata = localStorage.getItem("PostData");
+//   if(fetchdata){
+//   data = JSON.parse(fetchdata);
+//   console.log(data,"this is from local");
+// }
+// } 
+// storeData();
 
 //######---submit data--########//
 const handleSubmit = async (e)=>{
@@ -71,17 +68,24 @@ const handleSubmit = async (e)=>{
 useEffect(()=>{
     axios.get('http://localhost:8080/api/booking')
    .then((response)=>{
-    //console.log(response.data[0])
-      localStorage.setItem("PostData",JSON.stringify(response.data[0]));
-      setlastData(response.data[0]);
+      // localStorage.setItem("PostData",JSON.stringify(response.data[0] || response.data));
+      let fetchData = response.data[0] || response.data
+      if(fetchData.length == 0){
+        console.log("will  not work",fetchData)
+        setshow(false);
+      }else{
+        console.log(" work",fetchData)
+        setlastData(fetchData);
+        setshow(true);
+      }
+      
    })
    .catch((err)=>{
     console.error(err);
    })
 },[])
 
-//console.log(bookmyshow_logo);
-console.log(lastdata.seats,"this is from mongodb");
+//console.log(lastdata.seats,"this is from mongodb");
   return (<>  
     <div className="container">
         <div className="column-1">
@@ -171,19 +175,19 @@ console.log(lastdata.seats,"this is from mongodb");
         {/* Last booking Detail */}
         <div className="column-2">
             <div className="movie-row">
-              {(lastdata==undefined) ? (
+              {show == false ? (
                 <p>No record Found</p>
               ):
               ( 
                 <div>
                   <h5>Last Booking Detail</h5>
                   <h6>Seats:</h6>
-                  <h6>A1: <span>{data.seats.A1}</span></h6>
-                  <h6>A2: {data.seats.A2}</h6>
-                  <h6>A3: {data.seats.A3}</h6>
-                  <h6>A4: {data.seats.A4}</h6>
-                  <h6>D1: {data.seats.D1}</h6>
-                  <h6>D2: {data.seats.D2}</h6>
+                  <h6>A1: <span>{lastdata.seats.A1}</span></h6>
+                  <h6>A2: {lastdata.seats.A2}</h6>
+                  <h6>A3: {lastdata.seats.A3}</h6>
+                  <h6>A4: {lastdata.seats.A4}</h6>
+                  <h6>D1: {lastdata.seats.D1}</h6>
+                  <h6>D2: {lastdata.seats.D2}</h6>
                   <h6>Slot: {lastdata.slot}</h6>
                   <h6>Movie: {lastdata.movie}</h6>
                 </div>
